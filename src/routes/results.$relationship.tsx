@@ -147,34 +147,36 @@ function Results() {
                 <div className="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-primary">
                   <Lock className="size-3.5" /> Locked in the Blueprint
                 </div>
-       <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left">
-  <h3 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4">
-    What's Inside Your 24-Page Custom Blueprint
-  </h3>
-  
-  <ul className="space-y-3 text-sm text-muted-foreground">
-    <li className="flex gap-3">
-      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-      <span><strong>The 3 De-escalation Sentences:</strong> Exact phrasing designed to short-circuit anxiety before it turns into interrogating questions.</span>
-    </li>
-    <li className="flex gap-3">
-      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-      <span><strong>The "Stress-Test" Blindspot Map:</strong> Discover how their need to anticipate worst-case scenarios impacts your daily dynamic—and how to reassure them effortlessly.</span>
-    </li>
-    <li className="flex gap-3">
-      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-      <span><strong>Boundary & Apology Scripts:</strong> Copy-and-paste text templates for setting boundaries without triggering fear of abandonment.</span>
-    </li>
-    <li className="flex gap-3">
-      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-      <span><strong>The One-Page Phone Cheat Sheet:</strong> A quick-reference summary tailored specifically for your relationship dynamics.</span>
-    </li>
-  </ul>
+              </div>
 
-  <div className="mt-6 border-t border-border/60 pt-4 text-center">
-    <p className="text-xs text-muted-foreground">⚡ Instant PDF Download · Read in 10 minutes · 100% Tailored to Your Results</p>
-  </div>
-</div>
+              <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4">
+                  What's Inside Your 24-Page Custom Blueprint
+                </h3>
+                
+                <ul className="space-y-3 text-sm text-muted-foreground">
+                  <li className="flex gap-3">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span><strong>The 3 De-escalation Sentences:</strong> Exact phrasing designed to short-circuit anxiety before it turns into interrogating questions.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span><strong>The "Stress-Test" Blindspot Map:</strong> Discover how their need to anticipate worst-case scenarios impacts your daily dynamic—and how to reassure them effortlessly.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span><strong>Boundary & Apology Scripts:</strong> Copy-and-paste text templates for setting boundaries without triggering fear of abandonment.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span><strong>The One-Page Phone Cheat Sheet:</strong> A quick-reference summary tailored specifically for your relationship dynamics.</span>
+                  </li>
+                </ul>
+
+                <div className="mt-6 border-t border-border/60 pt-4 text-center">
+                  <p className="text-xs text-muted-foreground">⚡ Instant PDF Download · Read in 10 minutes · 100% Tailored to Your Results</p>
+                </div>
+              </div>
 
               <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-6">
                 <div>
