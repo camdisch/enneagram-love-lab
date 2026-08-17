@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnalyzingRelationshipRouteImport } from './routes/analyzing.$relationship'
 import { Route as QuizRelationshipRouteImport } from './routes/quiz.$relationship'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyzingRelationshipRoute = AnalyzingRelationshipRouteImport.update({
+  id: '/analyzing/$relationship',
+  path: '/analyzing/$relationship',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRelationshipRoute = QuizRelationshipRouteImport.update({
@@ -25,27 +31,31 @@ const QuizRelationshipRoute = QuizRelationshipRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
   '/quiz/$relationship': typeof QuizRelationshipRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
   '/quiz/$relationship': typeof QuizRelationshipRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
   '/quiz/$relationship': typeof QuizRelationshipRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/quiz/$relationship'
+  fullPaths: '/' | '/analyzing/$relationship' | '/quiz/$relationship'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/quiz/$relationship'
-  id: '__root__' | '/' | '/quiz/$relationship'
+  to: '/' | '/analyzing/$relationship' | '/quiz/$relationship'
+  id: '__root__' | '/' | '/analyzing/$relationship' | '/quiz/$relationship'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyzingRelationshipRoute: typeof AnalyzingRelationshipRoute
   QuizRelationshipRoute: typeof QuizRelationshipRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyzing/$relationship': {
+      id: '/analyzing/$relationship'
+      path: '/analyzing/$relationship'
+      fullPath: '/analyzing/$relationship'
+      preLoaderRoute: typeof AnalyzingRelationshipRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz/$relationship': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyzingRelationshipRoute: AnalyzingRelationshipRoute,
   QuizRelationshipRoute: QuizRelationshipRoute,
 }
 export const routeTree = rootRouteImport
