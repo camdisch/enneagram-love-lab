@@ -150,7 +150,7 @@ function Results() {
                 </div>
               </div>
 
-              {/* NEW FREE INTERACTION PLAYBOOK BLOCK */}
+              {/* FREE PLAYBOOK BLOCK */}
               <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left space-y-4">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
                   Free Playbook: How to Handle Their Stress Today
@@ -172,20 +172,27 @@ function Results() {
                 </div>
               </div>
 
-              {/* PREMIUM BLUEPRINT VALUE PITCH */}
+              {/* ENHANCED OPERATOR'S MANUAL / BLUEPRINT PITCH */}
               <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4">
-                  What's Inside Your Full 24-Page Custom Blueprint
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-primary mb-2">
+                  The Complete 24-Page Operator's Manual & Blueprint
                 </h3>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Everything you need to navigate them for the rest of your life without guessing.
+                </p>
                 
                 <ul className="space-y-3 text-sm text-muted-foreground">
+                  <li className="flex gap-3">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span><strong>The Complete Interaction Manual:</strong> Step-by-step instructions on how to structure daily conversations, prevent friction, and create effortless harmony.</span>
+                  </li>
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
                     <span><strong>The 3 De-escalation Sentences:</strong> Exact word-for-word scripts designed to short-circuit anxiety before arguments spiral.</span>
                   </li>
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span><strong>The "Stress-Test" Blindspot Map:</strong> Discover how their coping style impacts your daily rhythm—and how to navigate it seamlessly.</span>
+                    <span><strong>Famous Archetype Parallels:</strong> Real-world psychological patterns and historical traits shared by similar profiles.</span>
                   </li>
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
@@ -193,7 +200,7 @@ function Results() {
                   </li>
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span><strong>The One-Page Phone Cheat Sheet:</strong> A quick-reference summary tailored specifically for your exact relationship dynamics.</span>
+                    <span><strong>The One-Page Phone Cheat Sheet:</strong> Your ultimate quick-reference guide for every detail you'll ever need to know.</span>
                   </li>
                 </ul>
 
@@ -221,7 +228,7 @@ function Results() {
                     })
                   }
                 >
-                  <FileText /> Unlock the Blueprint
+                  <FileText /> Unlock the Operator's Manual
                 </Button>
               </div>
             </section>
