@@ -47,7 +47,7 @@ function Quiz() {
   const [scores, setScores] = useState<Scores>(() => emptyScores());
   const [history, setHistory] = useState<TypeId[]>([]);
 
-  const question = QUESTIONS[index];
+  const question = QUESTIONS[index]!;
   const progress = (index / QUESTIONS.length) * 100;
 
   function choose(type: TypeId) {
@@ -68,7 +68,7 @@ function Quiz() {
       navigate({ to: "/" });
       return;
     }
-    const last = history[history.length - 1];
+    const last = history[history.length - 1]!;
     setScores((s) => ({ ...s, [last]: Math.max(0, s[last] - 1) }));
     setHistory((h) => h.slice(0, -1));
     setIndex(index - 1);
