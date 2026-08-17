@@ -175,9 +175,9 @@ function Results() {
               <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-6">
                 <div>
                   <p className="font-display text-4xl">
-                    $19{" "}
+                    $2.99{" "}
                     <span className="align-middle text-base text-muted-foreground line-through">
-                      $39
+                      $7.99
                     </span>
                   </p>
                   <p className="text-xs text-muted-foreground">One-time · instant PDF download</p>
