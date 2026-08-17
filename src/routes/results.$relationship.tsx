@@ -194,9 +194,6 @@ function Results() {
                   <FileText /> Unlock the Blueprint
                 </Button>
               </div>
-              <p className="mt-4 text-center text-xs text-muted-foreground">
-                Secure payment via Stripe (placeholder) · 7-day refund promise
-              </p>
             </section>
 
             <section className="mt-10 flex flex-wrap justify-center gap-3">
