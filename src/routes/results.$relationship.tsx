@@ -147,30 +147,34 @@ function Results() {
                 <div className="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-primary">
                   <Lock className="size-3.5" /> Locked in the Blueprint
                 </div>
-              </div>
-            </section>
+       <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left">
+  <h3 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4">
+    What's Inside Your 24-Page Custom Blueprint
+  </h3>
+  
+  <ul className="space-y-3 text-sm text-muted-foreground">
+    <li className="flex gap-3">
+      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+      <span><strong>The 3 De-escalation Sentences:</strong> Exact phrasing designed to short-circuit anxiety before it turns into interrogating questions.</span>
+    </li>
+    <li className="flex gap-3">
+      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+      <span><strong>The "Stress-Test" Blindspot Map:</strong> Discover how their need to anticipate worst-case scenarios impacts your daily dynamic—and how to reassure them effortlessly.</span>
+    </li>
+    <li className="flex gap-3">
+      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+      <span><strong>Boundary & Apology Scripts:</strong> Copy-and-paste text templates for setting boundaries without triggering fear of abandonment.</span>
+    </li>
+    <li className="flex gap-3">
+      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+      <span><strong>The One-Page Phone Cheat Sheet:</strong> A quick-reference summary tailored specifically for your relationship dynamics.</span>
+    </li>
+  </ul>
 
-            <section className="mt-12 rounded-3xl border border-primary/40 bg-card/70 p-8 shadow-[var(--shadow-glow)] md:p-10">
-              <p className="text-xs uppercase tracking-[0.3em] text-primary">Unlock everything</p>
-              <h2 className="mt-4 text-3xl">The Premium Relationship Blueprint</h2>
-              <p className="mt-3 text-muted-foreground">
-                A 24-page personalised PDF built from this exact result — written for you and{" "}
-                {relationship.subject}, delivered instantly.
-              </p>
-              <ul className="mt-6 space-y-3 text-sm">
-                {[
-                  `Full 9-type profile with ${primary.name} wings and stress lines`,
-                  `The three sentences that calm ${relationship.possessive} down fastest`,
-                  "Their conflict pattern, decoded turn by turn",
-                  "Birthday, apology and boundary scripts you can copy",
-                  "A one-page cheat sheet for your phone",
-                ].map((f) => (
-                  <li key={f} className="flex gap-3">
-                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span className="text-muted-foreground">{f}</span>
-                  </li>
-                ))}
-              </ul>
+  <div className="mt-6 border-t border-border/60 pt-4 text-center">
+    <p className="text-xs text-muted-foreground">⚡ Instant PDF Download · Read in 10 minutes · 100% Tailored to Your Results</p>
+  </div>
+</div>
 
               <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-6">
                 <div>
