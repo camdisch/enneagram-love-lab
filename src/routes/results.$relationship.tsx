@@ -1,6 +1,6 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Check, Lock, RefreshCw, Share2, FileText } from "lucide-react";
+import { Check, Lock, RefreshCw, Share2, FileText, HeartHandshake, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdSlot } from "@/components/AdSlot";
@@ -137,6 +137,7 @@ function Results() {
                   );
                 })}
               </div>
+              
               <div className="relative mt-6 overflow-hidden rounded-2xl border border-border/70 bg-card/40 p-6">
                 <div className="select-none blur-sm" aria-hidden>
                   <p className="text-sm text-muted-foreground">
@@ -149,27 +150,50 @@ function Results() {
                 </div>
               </div>
 
+              {/* NEW FREE INTERACTION PLAYBOOK BLOCK */}
+              <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left space-y-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
+                  Free Playbook: How to Handle Their Stress Today
+                </h3>
+                
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl bg-background/50 p-4 border border-border/50">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-1">
+                      <HeartHandshake className="size-4" /> What Makes Them Feel Safe
+                    </div>
+                    <p className="text-sm text-muted-foreground">Clear validation, patience, and stable physical presence before you attempt any logical fixes.</p>
+                  </div>
+                  <div className="rounded-xl bg-background/50 p-4 border border-border/50">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-destructive uppercase tracking-wider mb-1">
+                      <ShieldAlert className="size-4" /> What Triggers Defensiveness
+                    </div>
+                    <p className="text-sm text-muted-foreground">Dismissing their core concerns or demanding instant rational explanations under pressure.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* PREMIUM BLUEPRINT VALUE PITCH */}
               <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4">
-                  What's Inside Your 24-Page Custom Blueprint
+                  What's Inside Your Full 24-Page Custom Blueprint
                 </h3>
                 
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span><strong>The 3 De-escalation Sentences:</strong> Exact phrasing designed to short-circuit anxiety before it turns into interrogating questions.</span>
+                    <span><strong>The 3 De-escalation Sentences:</strong> Exact word-for-word scripts designed to short-circuit anxiety before arguments spiral.</span>
                   </li>
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span><strong>The "Stress-Test" Blindspot Map:</strong> Discover how their need to anticipate worst-case scenarios impacts your daily dynamic—and how to reassure them effortlessly.</span>
+                    <span><strong>The "Stress-Test" Blindspot Map:</strong> Discover how their coping style impacts your daily rhythm—and how to navigate it seamlessly.</span>
                   </li>
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span><strong>Boundary & Apology Scripts:</strong> Copy-and-paste text templates for setting boundaries without triggering fear of abandonment.</span>
+                    <span><strong>Boundary & Apology Scripts:</strong> Copy-and-paste text templates for setting boundaries without triggering fear or withdrawal.</span>
                   </li>
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span><strong>The One-Page Phone Cheat Sheet:</strong> A quick-reference summary tailored specifically for your relationship dynamics.</span>
+                    <span><strong>The One-Page Phone Cheat Sheet:</strong> A quick-reference summary tailored specifically for your exact relationship dynamics.</span>
                   </li>
                 </ul>
 
