@@ -140,9 +140,14 @@ function Landing() {
             what to actually do with it — their triggers, their repair language, and the sentence
             that ends most of your fights.
           </p>
-          <Button asChild variant="outlineGold" size="lg" className="mt-8">
-            <a href="#tests">Start with a free test</a>
-          </Button>
+
+          <div className="mt-8 flex flex-col items-center justify-center gap-4">
+            <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+            <stripe-buy-button
+              buy-button-id="buy_btn_1U5cjTI1GEIXUU62xLe8N8UI"
+              publishable-key="pk_live_51JPXkAI1GEIXUU62pBayD0Rn9rBnDoqB2cnp7NCsJQLHoZrnWIqiFjnvJyfRrow9NpZtJlsEb6FCoZWhzNBgFXTX00Ts3HY6e0"
+            ></stripe-buy-button>
+          </div>
         </div>
       </section>
 
