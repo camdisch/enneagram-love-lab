@@ -213,7 +213,7 @@ function Results() {
               <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-6">
                 <div>
                   <p className="font-display text-4xl">
-                    $2.99{" "}
+                    $0.99{" "}
                     <span className="align-middle text-base text-muted-foreground line-through">
                       $7.99
                     </span>
@@ -221,7 +221,7 @@ function Results() {
                   <p className="text-xs text-muted-foreground">One-time · instant PDF download</p>
                 </div>
                 <Button asChild variant="gold" size="xl">
-                  <a href="https://buy.stripe.com/bJe14n5eXc5r5tK2Hmdby00" target="_blank" rel="noopener noreferrer">
+                  <a href="https://buy.stripe.com/bJe3cv0YH1qN2hy95Kdby01" target="_blank" rel="noopener noreferrer">
                     <FileText /> Unlock the Operator's Manual <ArrowRight className="size-4 ml-1" />
                   </a>
                 </Button>
