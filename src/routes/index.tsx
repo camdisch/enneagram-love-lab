@@ -142,11 +142,11 @@ function Landing() {
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4">
-            <script async src="https://js.stripe.com/v3/buy-button.js"></script>
-            <stripe-buy-button
-              buy-button-id="buy_btn_1U5cjTI1GEIXUU62xLe8N8UI"
-              publishable-key="pk_live_51JPXkAI1GEIXUU62pBayD0Rn9rBnDoqB2cnp7NCsJQLHoZrnWIqiFjnvJyfRrow9NpZtJlsEb6FCoZWhzNBgFXTX00Ts3HY6e0"
-            ></stripe-buy-button>
+            <Button asChild variant="gold" size="lg">
+              <a href="https://buy.stripe.com/bJe14n5eXc5r5tK2Hmdby00" target="_blank" rel="noopener noreferrer">
+                Get the Blueprint ($2.99) <ArrowRight className="size-4 ml-2" />
+              </a>
+            </Button>
           </div>
         </div>
       </section>
