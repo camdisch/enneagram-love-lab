@@ -215,7 +215,7 @@ function Results() {
                   <p className="font-display text-4xl">
                     $0.99{" "}
                     <span className="align-middle text-base text-muted-foreground line-through">
-                      $7.99
+                      $2.99
                     </span>
                   </p>
                   <p className="text-xs text-muted-foreground">One-time · instant PDF download</p>
