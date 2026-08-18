@@ -1,8 +1,7 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Check, Lock, RefreshCw, Share2, FileText, HeartHandshake, ShieldAlert } from "lucide-react";
+import { Check, Lock, RefreshCw, Share2, FileText, HeartHandshake, ShieldAlert, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-
 import { AdSlot } from "@/components/AdSlot";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +21,12 @@ export const Route = createFileRoute("/results/$relationship")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Result unavailable" }, { name: "robots", content: "noindex" }] };
+      return {
+        meta: [
+          { title: "Result unavailable" },
+          { name: "robots", content: "noindex" },
+        ],
+      };
     }
     const title = `Your ${loaderData.relationship.label} result · Relationship Enneagram`;
     const description = `The archetype behind ${loaderData.relationship.subject} — their gift, their friction, and what unlocks in the Premium Relationship Blueprint.`;
@@ -53,8 +57,7 @@ function Results() {
       <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
         <h1 className="text-3xl">This result has expired</h1>
         <p className="mt-3 max-w-sm text-muted-foreground">
-          Results live in this browser session only. Retake the {relationship.label} test to see it
-          again.
+          Results live in this browser session only. Retake the {relationship.label} test to see it again.
         </p>
         <Button asChild variant="gold" size="lg" className="mt-8">
           <Link to="/quiz/$relationship" params={{ relationship: relationship.slug }}>
@@ -73,7 +76,9 @@ function Results() {
   function share() {
     const url = typeof window !== "undefined" ? window.location.origin : "";
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(`I found out ${relationship.subject}'s Enneagram archetype: ${primary?.name}. Try it: ${url}`);
+      navigator.clipboard.writeText(
+        `I found out ${relationship.subject}'s Enneagram archetype: ${primary?.name}. Try it: ${url}`
+      );
       toast.success("Copied — go ruin someone's evening");
     }
   }
@@ -137,12 +142,11 @@ function Results() {
                   );
                 })}
               </div>
-              
+
               <div className="relative mt-6 overflow-hidden rounded-2xl border border-border/70 bg-card/40 p-6">
                 <div className="select-none blur-sm" aria-hidden>
                   <p className="text-sm text-muted-foreground">
-                    {wings.map((w) => w.name).join(" · ")} — their secondary pull shapes how they
-                    apologise, how they withdraw, and what they need on the worst day of the year.
+                    {wings.map((w) => w.name).join(" · ")} — their secondary pull shapes how they apologise, how they withdraw, and what they need on the worst day of the year.
                   </p>
                 </div>
                 <div className="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-primary">
@@ -155,7 +159,6 @@ function Results() {
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
                   Free Playbook: How to Handle Their Stress Today
                 </h3>
-                
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-xl bg-background/50 p-4 border border-border/50">
                     <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-1">
@@ -180,7 +183,6 @@ function Results() {
                 <p className="text-xs text-muted-foreground mb-4">
                   Everything you need to navigate them for the rest of your life without guessing.
                 </p>
-                
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
@@ -203,7 +205,6 @@ function Results() {
                     <span><strong>The One-Page Phone Cheat Sheet:</strong> Your ultimate quick-reference guide for every detail you'll ever need to know.</span>
                   </li>
                 </ul>
-
                 <div className="mt-6 border-t border-border/60 pt-4 text-center">
                   <p className="text-xs text-muted-foreground">⚡ Instant PDF Download · Read in 10 minutes · 100% Tailored to Your Results</p>
                 </div>
@@ -219,16 +220,10 @@ function Results() {
                   </p>
                   <p className="text-xs text-muted-foreground">One-time · instant PDF download</p>
                 </div>
-                <Button
-                  variant="gold"
-                  size="xl"
-                  onClick={() =>
-                    toast("Stripe Checkout placeholder", {
-                      description: "Connect payments to enable real checkout for the Blueprint.",
-                    })
-                  }
-                >
-                  <FileText /> Unlock the Operator's Manual
+                <Button asChild variant="gold" size="xl">
+                  <a href="https://buy.stripe.com/bJe14n5eXc5r5tK2Hmdby00" target="_blank" rel="noopener noreferrer">
+                    <FileText /> Unlock the Operator's Manual <ArrowRight className="size-4 ml-1" />
+                  </a>
                 </Button>
               </div>
             </section>
