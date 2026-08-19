@@ -1,0 +1,94 @@
+# Generate an Operator's Manual PDF from the GitHub website.
+#
+# Actions tab -> "Generate a manual" -> "Run workflow" -> paste the scores ->
+# wait ~40 seconds -> download the PDF from the "Artifacts" section of the run.
+# No Python, no terminal, nothing installed on your machine.
+#
+# It also runs the test suite on every push that touches pdf/, so a broken
+# copy edit fails here instead of in a customer's download.
+
+name: Generate a manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      scores:
+        description: 'Scores for types 1-9, e.g. 2-1-7-3-1-0-4-0-1 (the "s" value from a results link)'
+        required: true
+        default: '2-1-7-3-1-0-4-0-1'
+      relationship:
+        description: 'Which quiz they took'
+        required: true
+        default: 'mom'
+        type: choice
+        options: [mom, dad, boyfriend, girlfriend, best-friend]
+      name:
+        description: "Their first name (optional — leave blank to use 'your mom' etc.)"
+        required: false
+        default: ''
+  push:
+    paths: ['pdf/**']
+  pull_request:
+    paths: ['pdf/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: pdf
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+
+      # Runs on every push too: catches a broken copy edit before it ships.
+      - name: Run the test suite
+        working-directory: pdf
+        run: python -m pytest -q
+
+      - name: QA every type x relationship combination
+        working-directory: pdf
+        run: python -m enneagram_manual --self-test --strict
+
+      # Inputs go in via env, never interpolated into the shell command:
+      # a name with a quote in it would otherwise break the run, and untrusted
+      # text in a run: block is a script-injection vector.
+      - name: Generate the manual
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: pdf
+        env:
+          SCORES: ${{ inputs.scores }}
+          RELATIONSHIP: ${{ inputs.relationship }}
+          SUBJECT_NAME: ${{ inputs.name }}
+        run: |
+          python - <<'PY'
+          import os
+          from enneagram_manual import generate
+
+          report = generate(
+              scores=os.environ["SCORES"],
+              relationship=os.environ["RELATIONSHIP"],
+              subject_name=os.environ.get("SUBJECT_NAME") or None,
+              out_path="out/manual.pdf",
+              allow_unscored=True,   # a paid download must never hard-fail
+          )
+          print("wrote", report.path)
+          for w in report.profile.warnings:
+              print("  input repair:", w)
+          for v in report.violations:
+              print(f"  {v.severity}: [{v.rule}] {v.where} - {v.detail}")
+          PY
+
+      - name: Upload the PDF
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: operators-manual-${{ inputs.relationship }}
+          path: pdf/out/manual.pdf
+          retention-days: 30
