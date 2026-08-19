@@ -5,7 +5,7 @@ import heroCircle from "@/assets/hero-circle.jpg";
 import { AdSlot } from "@/components/AdSlot";
 import { Button } from "@/components/ui/button";
 import { ARCHETYPES, RELATIONSHIPS, type TypeId } from "@/lib/enneagram";
-import { PRODUCT } from "@/lib/product";
+import { BUNDLE, SINGLE } from "@/lib/product";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -138,20 +138,34 @@ function Landing() {
           {/* Name, price and checkout link all come from src/lib/product.ts,
               so this page and the results page can never advertise different
               things again. */}
-          <h2 className="mt-5 text-3xl">{PRODUCT.name}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{PRODUCT.description}</p>
+          {/* Name, price and checkout link all come from src/lib/product.ts,
+              so this page and the results page can never advertise different
+              things again. $0.99 leads; the collection sits under it. */}
+          <h2 className="mt-5 text-3xl">{SINGLE.name}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{SINGLE.description}</p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4">
-            {PRODUCT.isConfigured ? (
+            {SINGLE.isConfigured ? (
               <Button asChild variant="gold" size="lg">
-                <a href={PRODUCT.stripeUrl} target="_blank" rel="noopener noreferrer">
-                  {PRODUCT.ctaLabel} ({PRODUCT.price}) <ArrowRight className="size-4 ml-2" />
+                <a href={SINGLE.stripeUrl} target="_blank" rel="noopener noreferrer">
+                  {SINGLE.ctaLabel} ({SINGLE.price}) <ArrowRight className="size-4 ml-2" />
                 </a>
               </Button>
             ) : (
               <Button variant="gold" size="lg" disabled>
                 Checkout link not set
               </Button>
+            )}
+
+            {BUNDLE.isConfigured && (
+              <a
+                href={BUNDLE.stripeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-muted-foreground underline underline-offset-4 hover:text-primary"
+              >
+                {BUNDLE.ctaLabel} — {BUNDLE.price}
+              </a>
             )}
           </div>
         </div>

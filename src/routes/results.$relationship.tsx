@@ -22,9 +22,9 @@ import {
   type Scores,
 } from "@/lib/enneagram";
 import { ManualDownload } from "@/components/ManualDownload";
-import { hasAccess } from "@/lib/entitlement";
-import { encodeScores, savePendingPurchase } from "@/lib/pendingPurchase";
-import { PRODUCT } from "@/lib/product";
+import { hasAccessTo } from "@/lib/entitlement";
+import { encodeScores, savePendingPurchase, type PurchaseTier } from "@/lib/pendingPurchase";
+import { BUNDLE, SINGLE } from "@/lib/product";
 
 export const Route = createFileRoute("/results/$relationship")({
   loader: ({ params }) => {
@@ -62,7 +62,7 @@ function Results() {
 
   useEffect(() => {
     setScores(loadResult(relationship.slug));
-    setOwned(hasAccess());
+    setOwned(hasAccessTo(relationship.slug));
     setReady(true);
   }, [relationship.slug]);
 
@@ -95,11 +95,12 @@ function Results() {
    * sessionStorage does not reliably survive that round trip on mobile. This
    * is the only reason /unlocked knows which manual to generate.
    */
-  function startCheckout() {
+  function startCheckout(tier: PurchaseTier) {
     if (!scores) return;
     savePendingPurchase({
       scores: encodeScores(scores),
       relationship: relationship.slug,
+      tier,
     });
   }
 
@@ -189,7 +190,7 @@ function Results() {
                     </>
                   ) : (
                     <>
-                      <Lock className="size-3.5" /> Locked in the {PRODUCT.manualName}
+                      <Lock className="size-3.5" /> Locked in the {SINGLE.shortName}
                     </>
                   )}
                 </div>
@@ -275,46 +276,77 @@ function Results() {
                 </div>
               </div>
 
-              {/* Already bought the collection? Then this manual is theirs —
-                  it generates in the browser, so there is nothing to fetch and
-                  no reason to make them pay twice for a different relationship. */}
+              {/* Owned already? Hand it over. It generates in the browser, so
+                  there is nothing to fetch and no reason to charge twice. */}
               {owned && scores ? (
                 <div className="mt-8 border-t border-border pt-6">
                   <p className="mb-4 text-center text-xs uppercase tracking-[0.25em] text-primary">
-                    Included in your collection
+                    Yours — already unlocked
                   </p>
                   <ManualDownload scores={encodeScores(scores)} relationship={relationship.slug} />
                 </div>
               ) : (
-                <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-6">
-                  <div>
-                    <p className="font-display text-4xl">
-                      {PRODUCT.price}
-                      {PRODUCT.compareAtPrice && (
-                        <>
-                          {" "}
-                          <span className="align-middle text-base text-muted-foreground line-through">
-                            {PRODUCT.compareAtPrice}
-                          </span>
-                        </>
-                      )}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      One payment · all five manuals · instant PDF download
-                    </p>
+                <>
+                  {/* TIER 1 — the offer. $0.99, single manual, top billing. */}
+                  <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-6">
+                    <div>
+                      <p className="font-display text-4xl">
+                        {SINGLE.price}
+                        {SINGLE.compareAtPrice && (
+                          <>
+                            {" "}
+                            <span className="align-middle text-base text-muted-foreground line-through">
+                              {SINGLE.compareAtPrice}
+                            </span>
+                          </>
+                        )}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        One-time · this manual · instant PDF download
+                      </p>
+                    </div>
+                    {SINGLE.isConfigured ? (
+                      <Button
+                        asChild
+                        variant="gold"
+                        size="xl"
+                        onClick={() => startCheckout("single")}
+                      >
+                        <a href={SINGLE.stripeUrl} target="_blank" rel="noopener noreferrer">
+                          <FileText /> {SINGLE.ctaLabel} <ArrowRight className="size-4 ml-1" />
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button variant="gold" size="xl" disabled>
+                        Checkout link not set
+                      </Button>
+                    )}
                   </div>
-                  {PRODUCT.isConfigured ? (
-                    <Button asChild variant="gold" size="xl" onClick={startCheckout}>
-                      <a href={PRODUCT.stripeUrl} target="_blank" rel="noopener noreferrer">
-                        <FileText /> {PRODUCT.ctaLabel} <ArrowRight className="size-4 ml-1" />
-                      </a>
-                    </Button>
-                  ) : (
-                    <Button variant="gold" size="xl" disabled>
-                      Checkout link not set
-                    </Button>
+
+                  {/* TIER 2 — the upgrade, deliberately quieter and below.
+                      It is an extra option, never a replacement for $0.99. */}
+                  {BUNDLE.isConfigured && (
+                    <div className="mt-4 rounded-2xl border border-border/60 bg-card/30 px-5 py-4">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="text-left">
+                          <p className="text-sm text-foreground/90">
+                            Decoding more than one person?
+                          </p>
+                          <p className="text-xs text-muted-foreground">{BUNDLE.description}</p>
+                        </div>
+                        <Button
+                          asChild
+                          variant="outlineGold"
+                          onClick={() => startCheckout("bundle")}
+                        >
+                          <a href={BUNDLE.stripeUrl} target="_blank" rel="noopener noreferrer">
+                            {BUNDLE.ctaLabel} — {BUNDLE.price}
+                          </a>
+                        </Button>
+                      </div>
+                    </div>
                   )}
-                </div>
+                </>
               )}
             </section>
 
