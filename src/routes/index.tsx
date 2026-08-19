@@ -5,6 +5,7 @@ import heroCircle from "@/assets/hero-circle.jpg";
 import { AdSlot } from "@/components/AdSlot";
 import { Button } from "@/components/ui/button";
 import { ARCHETYPES, RELATIONSHIPS, type TypeId } from "@/lib/enneagram";
+import { PRODUCT } from "@/lib/product";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,8 +40,7 @@ function Landing() {
             <Sparkles className="size-3.5" /> 9 archetypes
           </span>
           <h1 className="mt-6 text-5xl leading-[1.03] md:text-7xl">
-            Who are they{" "}
-            <em className="text-gradient-gold not-italic">really</em>?
+            Who are they <em className="text-gradient-gold not-italic">really</em>?
           </h1>
           <p className="mt-6 max-w-lg text-lg text-muted-foreground">
             The relationship Enneagram test that reads the people you can't stop thinking about.
@@ -105,7 +105,8 @@ function Landing() {
               <h3 className="mt-5 text-2xl">The {r.label} Test</h3>
               <p className="mt-2 text-sm text-muted-foreground">{r.hook}</p>
               <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary">
-                Take it <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                Take it{" "}
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </span>
             </Link>
           ))}
@@ -134,19 +135,24 @@ function Landing() {
       <section className="mx-auto max-w-4xl px-6 pb-16">
         <div className="rounded-3xl border border-primary/30 bg-card/60 p-10 text-center">
           <Lock className="mx-auto size-6 text-primary" />
-          <h2 className="mt-5 text-3xl">The Premium Relationship Blueprint</h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Your free result names their archetype. The Blueprint is the 24-page PDF that tells you
-            what to actually do with it — their triggers, their repair language, and the sentence
-            that ends most of your fights.
-          </p>
+          {/* Name, price and checkout link all come from src/lib/product.ts,
+              so this page and the results page can never advertise different
+              things again. */}
+          <h2 className="mt-5 text-3xl">{PRODUCT.name}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{PRODUCT.description}</p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4">
-            <Button asChild variant="gold" size="lg">
-              <a href="https://buy.stripe.com/bJe14n5eXc5r5tK2Hmdby00" target="_blank" rel="noopener noreferrer">
-                Get the Blueprint ($2.99) <ArrowRight className="size-4 ml-2" />
-              </a>
-            </Button>
+            {PRODUCT.isConfigured ? (
+              <Button asChild variant="gold" size="lg">
+                <a href={PRODUCT.stripeUrl} target="_blank" rel="noopener noreferrer">
+                  {PRODUCT.ctaLabel} ({PRODUCT.price}) <ArrowRight className="size-4 ml-2" />
+                </a>
+              </Button>
+            ) : (
+              <Button variant="gold" size="lg" disabled>
+                Checkout link not set
+              </Button>
+            )}
           </div>
         </div>
       </section>

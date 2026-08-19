@@ -174,7 +174,7 @@ ARCHETYPES: dict[int, Archetype] = {}
 
 
 ARCHETYPES[1] = Archetype(
-    type_id=1, name="The Perfector", glyph="I",
+    type_id=1, name="The Standard-Keeper", glyph="I",
     title="The one who cannot let it be good enough",
     one_line=(
         "{subject} runs a permanent internal audit, and the loudest auditor is pointed "
@@ -487,7 +487,7 @@ ARCHETYPES[2] = Archetype(
 
 
 ARCHETYPES[3] = Archetype(
-    type_id=3, name="The Frontrunner", glyph="III",
+    type_id=3, name="The Golden Achiever", glyph="III",
     title="The one who becomes whatever wins",
     one_line=(
         "{subject} reads the room for what counts as impressive and then becomes it, so "
@@ -513,7 +513,7 @@ ARCHETYPES[3] = Archetype(
     stress_to=9, stress_text=(
         "The failure mode is not a crash, it is a fade. {subject} goes vague, agreeable, "
         "and strangely unreachable — still functioning, still charming, entirely absent. "
-        "A {core_bare} who has stopped competing is not relaxed. They are hiding."
+        "When this one stops competing they are not relaxed. They are hiding."
     ),
     growth_to=6, growth_text=(
         "The good direction looks like loyalty over optics: staying with something that is "
@@ -785,7 +785,7 @@ ARCHETYPES[4] = Archetype(
 
 
 ARCHETYPES[5] = Archetype(
-    type_id=5, name="The Vault", glyph="V",
+    type_id=5, name="The Quiet Observer", glyph="V",
     title="The one who watches from the doorway",
     one_line=(
         "{subject} pulls back to think, and the pulling back is not a verdict on you. "
@@ -935,7 +935,7 @@ ARCHETYPES[5] = Archetype(
 
 
 ARCHETYPES[6] = Archetype(
-    type_id=6, name="The Sentinel", glyph="VI",
+    type_id=6, name="The Loyal Guardian", glyph="VI",
     title="The one who is already scanning for the exit",
     one_line=(
         "{subject} has run the disaster in their head before you finished the sentence. "
@@ -1087,7 +1087,7 @@ ARCHETYPES[6] = Archetype(
 
 
 ARCHETYPES[7] = Archetype(
-    type_id=7, name="The Escape Artist", glyph="VII",
+    type_id=7, name="The Bright Escape", glyph="VII",
     title="The one who leaves before it can hurt",
     one_line=(
         "{subject} is the best day of your month and the hardest person to find on the "
@@ -1239,7 +1239,7 @@ ARCHETYPES[7] = Archetype(
 
 
 ARCHETYPES[8] = Archetype(
-    type_id=8, name="The Force", glyph="VIII",
+    type_id=8, name="The Fierce Protector", glyph="VIII",
     title="The one who protects by pushing",
     one_line=(
         "{subject} would rather have the fight now than the resentment later, and they "
@@ -1395,7 +1395,7 @@ ARCHETYPES[8] = Archetype(
 
 
 ARCHETYPES[9] = Archetype(
-    type_id=9, name="The Peacekeeper", glyph="IX",
+    type_id=9, name="The Steady Peace", glyph="IX",
     title="The one who disappears to keep the peace",
     one_line=(
         "{subject} is the easiest person in your life to be around and the hardest to "

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UnlockedRouteImport } from './routes/unlocked'
 import { Route as AnalyzingRelationshipRouteImport } from './routes/analyzing.$relationship'
 import { Route as QuizRelationshipRouteImport } from './routes/quiz.$relationship'
 import { Route as ResultsRelationshipRouteImport } from './routes/results.$relationship'
@@ -17,6 +18,11 @@ import { Route as ResultsRelationshipRouteImport } from './routes/results.$relat
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnlockedRoute = UnlockedRouteImport.update({
+  id: '/unlocked',
+  path: '/unlocked',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyzingRelationshipRoute = AnalyzingRelationshipRouteImport.update({
@@ -37,12 +43,14 @@ const ResultsRelationshipRoute = ResultsRelationshipRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/unlocked': typeof UnlockedRoute
   '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
   '/quiz/$relationship': typeof QuizRelationshipRoute
   '/results/$relationship': typeof ResultsRelationshipRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/unlocked': typeof UnlockedRoute
   '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
   '/quiz/$relationship': typeof QuizRelationshipRoute
   '/results/$relationship': typeof ResultsRelationshipRoute
@@ -50,6 +58,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/unlocked': typeof UnlockedRoute
   '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
   '/quiz/$relationship': typeof QuizRelationshipRoute
   '/results/$relationship': typeof ResultsRelationshipRoute
@@ -58,18 +67,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/unlocked'
     | '/analyzing/$relationship'
     | '/quiz/$relationship'
     | '/results/$relationship'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/unlocked'
     | '/analyzing/$relationship'
     | '/quiz/$relationship'
     | '/results/$relationship'
   id:
     | '__root__'
     | '/'
+    | '/unlocked'
     | '/analyzing/$relationship'
     | '/quiz/$relationship'
     | '/results/$relationship'
@@ -77,6 +89,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  UnlockedRoute: typeof UnlockedRoute
   AnalyzingRelationshipRoute: typeof AnalyzingRelationshipRoute
   QuizRelationshipRoute: typeof QuizRelationshipRoute
   ResultsRelationshipRoute: typeof ResultsRelationshipRoute
@@ -89,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unlocked': {
+      id: '/unlocked'
+      path: '/unlocked'
+      fullPath: '/unlocked'
+      preLoaderRoute: typeof UnlockedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analyzing/$relationship': {
@@ -117,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  UnlockedRoute: UnlockedRoute,
   AnalyzingRelationshipRoute: AnalyzingRelationshipRoute,
   QuizRelationshipRoute: QuizRelationshipRoute,
   ResultsRelationshipRoute: ResultsRelationshipRoute,

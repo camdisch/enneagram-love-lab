@@ -216,6 +216,7 @@ def build_document(profile: Profile) -> Document:
     ))
 
     # -- 3. The result ----------------------------------------------------
+    blend = b.build()
     ranked = profile.ranked()[:5]
     add(Section(
         number=3, kicker="The result", title="What the answers actually said",
@@ -236,8 +237,9 @@ def build_document(profile: Profile) -> Document:
                 "partial one. You will recognise the top two immediately.",
                 "result.method",
             )),
+            Callout(title="How far to trust this", text=blend.confidence_note),
         ),
-        budget=1600,
+        budget=2200,
     ))
 
     # -- 4. Who they are --------------------------------------------------
@@ -280,7 +282,6 @@ def build_document(profile: Profile) -> Document:
     ))
 
     # -- 6. The blend -----------------------------------------------------
-    blend = b.build()
     add(Section(
         number=6, kicker="The blend",
         title=(f"{core.name} × {b.secondary.name}"
@@ -382,7 +383,7 @@ def build_document(profile: Profile) -> Document:
         number=12, kicker="Recognition", title="How to spot it in the wild",
         blocks=(
             Para(b.say(
-                "Four behaviours that identify a {core_bare} faster than any question you "
+                "Four behaviours that identify this pattern faster than any question you "
                 "could ask {subject} directly.",
                 "tells.intro",
             )),
@@ -534,8 +535,8 @@ def build_document(profile: Profile) -> Document:
         number=21, kicker="Day to day", title="Questions that actually open them up",
         blocks=(
             Para(b.say(
-                "Three questions built for a {core_bare}. They work because none of them "
-                "can be answered with the version {subject} has ready.",
+                "Three questions built for this pattern. They work because none of them can "
+                "be answered with the version {subject} has ready.",
                 "starters.intro",
             )),
             *[Script(label=f"Ask {i + 1}", text=line)

@@ -18,7 +18,6 @@ refuses to let a distinctive phrase appear twice in one document.
 
 from __future__ import annotations
 
-import random
 import re
 from dataclasses import dataclass, field
 
@@ -32,6 +31,7 @@ from .content import (
     get_lens,
 )
 from .models import Profile
+from .portable import Rng
 from .templating import render
 
 _WORD = re.compile(r"[a-z']+")
@@ -85,7 +85,7 @@ class RepetitionLedger:
             else:
                 self._seen[gram] = where
 
-    def pick(self, options: list[str], rng: random.Random, where: str) -> str:
+    def pick(self, options: list[str], rng: Rng, where: str) -> str:
         """Choose the first non-colliding option; fall back to a random one.
 
         Deterministic given the same seed, so a buyer re-downloading gets a
@@ -93,8 +93,7 @@ class RepetitionLedger:
         """
         if not options:
             raise ValueError(f"{where}: no options to choose from.")
-        shuffled = list(options)
-        rng.shuffle(shuffled)
+        shuffled = rng.shuffle(list(options))
         for option in shuffled:
             if not self.would_collide(option):
                 return option
@@ -112,6 +111,10 @@ class Blend:
     conflicts: tuple[frozenset[str], ...]
     #: Prose paragraphs describing the blend, already rendered.
     paragraphs: tuple[str, ...] = ()
+    #: How far the scores can be trusted. Lives on the result page next to
+    #: the chart it is about, not on the blend page — and keeping it off p6
+    #: is what stops long archetype names overflowing that page.
+    confidence_note: str = ""
 
 
 # Openers for the blend section, chosen by mode so the copy never claims
@@ -126,13 +129,13 @@ _BLEND_OPENERS: dict[str, tuple[str, ...]] = {
         "with {subject} is close to the whole mechanism.",
     ),
     "blended": (
-        "{subject} is a {core_bare} at {core_pct} percent, running on top of an underlying {secondary_bare} "
+        "{subject} scores {core_name} at {core_pct} percent, running on top of an underlying {secondary_bare} "
         "at {secondary_pct}. The {core_bare} is what you meet. The {secondary_bare} is what "
         "decides how they behave once they are under pressure.",
         "The headline is {core_name} — {core_pct} percent of {subject_poss} answers — but the "
         "{secondary_bare} underneath at {secondary_pct} percent is doing more work than the "
-        "numbers suggest. It is the reason they do not behave like every other {core_bare} "
-        "you have met.",
+        "numbers suggest. It is the reason they do not behave like everyone else who "
+        "lands on {core_name}.",
     ),
     "split": (
         "This is a genuine split, not a clean type. {core_name} at {core_pct} percent and "
@@ -195,7 +198,7 @@ class Blender:
 
     def __init__(self, profile: Profile) -> None:
         self.profile = profile
-        self.rng = random.Random(profile.seed)
+        self.rng = Rng(profile.seed)
         self.ledger = RepetitionLedger()
         self.core = get_archetype(profile.core)
         self.secondary = get_archetype(profile.secondary)
@@ -292,11 +295,10 @@ class Blender:
         if self.wing.type_id not in (p.core, p.secondary):
             paragraphs.append(self.choose(_WING_LINES, "blend.wing"))
 
-        paragraphs.append(self.say(_CONFIDENCE_NOTES[p.confidence], "blend.confidence"))
-
         return Blend(
             mode=mode, core=self.core, secondary=self.secondary, wing=self.wing,
             conflicts=conflicts, paragraphs=tuple(paragraphs),
+            confidence_note=self.say(_CONFIDENCE_NOTES[p.confidence], "blend.confidence"),
         )
 
     def _flavour(self) -> str:

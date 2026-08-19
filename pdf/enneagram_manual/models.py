@@ -15,7 +15,6 @@ refund request.
 
 from __future__ import annotations
 
-import hashlib
 import math
 import re
 import unicodedata
@@ -23,6 +22,7 @@ from dataclasses import dataclass, field
 from typing import Any, Iterable, Mapping, Sequence
 
 from .errors import InputError
+from .portable import fnv1a, round_half_up
 
 TYPE_IDS: tuple[int, ...] = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 
@@ -282,7 +282,7 @@ class Profile:
             return 1
         if 99 < pct < 100:
             return 99
-        return int(round(pct))
+        return round_half_up(pct)
 
     @property
     def subject_ref(self) -> str:
@@ -328,7 +328,7 @@ def _seed_for(core: int, secondary: int, relationship_slug: str,
         str(core), str(secondary), relationship_slug,
         ",".join(f"{t}:{shares.get(t, 0.0):.4f}" for t in TYPE_IDS),
     ])
-    return int.from_bytes(hashlib.sha256(material.encode("utf-8")).digest()[:8], "big")
+    return fnv1a(material)
 
 
 def build_profile(
