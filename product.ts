@@ -77,12 +77,16 @@ export const PRODUCT = SINGLE;
  * Stripe → Payment Links → the link → Edit → "After payment" →
  * "Don't show confirmation page" → "Redirect customers to your website":
  *
- *     single link  →  https://YOUR-DOMAIN/unlocked
- *     bundle link  →  https://YOUR-DOMAIN/unlocked?all=1
+ *     single link  →  https://YOUR-DOMAIN/unlocked?session_id={CHECKOUT_SESSION_ID}
+ *     bundle link  →  https://YOUR-DOMAIN/unlocked?all=1&session_id={CHECKOUT_SESSION_ID}
+ *
+ * The session id is REQUIRED, not optional. Without it the page cannot tell a
+ * buyer from a passer-by, so it refuses to unlock anything and a real customer
+ * sees "we can't confirm a payment yet".
  *
  * The `?all=1` is a belt-and-braces signal. The site also records which button
  * was clicked before the buyer left, so the right thing unlocks even if the
  * redirect is misconfigured — but setting both makes it correct either way.
  */
-export const AFTER_PAYMENT_PATH = "/unlocked";
-export const AFTER_PAYMENT_PATH_BUNDLE = "/unlocked?all=1";
+export const AFTER_PAYMENT_PATH = "/unlocked?session_id={CHECKOUT_SESSION_ID}";
+export const AFTER_PAYMENT_PATH_BUNDLE = "/unlocked?all=1&session_id={CHECKOUT_SESSION_ID}";
