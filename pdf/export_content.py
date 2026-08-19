@@ -51,6 +51,15 @@ HEADER = '''/**
  * that no test would catch.
  */
 
+/**
+ * Keys are a closed set, so these unions (rather than bare `number`/`string`)
+ * are what let lookups typecheck under `noUncheckedIndexedAccess` without
+ * sprinkling non-null assertions through every consumer.
+ */
+export type TypeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type RelationshipSlug = "mom" | "dad" | "boyfriend" | "girlfriend" | "best-friend";
+export type BondKind = "parent" | "partner" | "peer";
+
 export interface Trigger {
   name: string;
   looks_like: string;
@@ -122,7 +131,7 @@ export interface Relationship {
   subject: string;
   possessive: string;
   short: string;
-  kind: "parent" | "partner" | "peer";
+  kind: BondKind;
   forbidden_frames: string[];
 }
 '''
@@ -131,13 +140,13 @@ export interface Relationship {
 def main() -> None:
     out = [HEADER]
 
-    out.append("export const ARCHETYPES: Record<number, Archetype> = " +
+    out.append("export const ARCHETYPES: Record<TypeId, Archetype> = " +
                js({k: archetype_dict(v) for k, v in sorted(ARCHETYPES.items())}) + ";\n")
 
-    out.append("export const LENSES: Record<string, RelationshipLens> = " +
+    out.append("export const LENSES: Record<RelationshipSlug, RelationshipLens> = " +
                js({k: dataclasses.asdict(v) for k, v in LENSES.items()}) + ";\n")
 
-    out.append("export const RELATIONSHIPS: Record<string, Relationship> = " +
+    out.append("export const RELATIONSHIPS: Record<RelationshipSlug, Relationship> = " +
                js({k: {**dataclasses.asdict(v),
                        "forbidden_frames": list(v.forbidden_frames)}
                    for k, v in RELATIONSHIPS.items()}) + ";\n")

@@ -20,9 +20,16 @@ import type { Scores } from "./enneagram";
 const KEY = "ell:pending-purchase";
 const MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7; // a week is generous for a checkout
 
+export type PurchaseTier = "single" | "bundle";
+
 export interface PendingPurchase {
   scores: string;
   relationship: string;
+  /**
+   * Which button they clicked. Both Stripe links redirect to the same page,
+   * so this is how /unlocked knows whether to unlock one manual or all five.
+   */
+  tier: PurchaseTier;
   /**
    * Explicitly `| undefined` rather than just optional: the repo runs with
    * exactOptionalPropertyTypes, under which an optional property may be
@@ -58,6 +65,9 @@ export function loadPendingPurchase(): PendingPurchase | null {
     return {
       scores: parsed.scores,
       relationship: parsed.relationship,
+      // Anything written before the two-tier split, or by a tampered-with
+      // storage entry, is treated as the cheaper purchase.
+      tier: parsed.tier === "bundle" ? "bundle" : "single",
       subjectName: typeof parsed.subjectName === "string" ? parsed.subjectName : undefined,
       savedAt: parsed.savedAt ?? Date.now(),
     };

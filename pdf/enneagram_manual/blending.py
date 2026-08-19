@@ -168,6 +168,24 @@ _WING_LINES: tuple[str, ...] = (
     "alongside.",
 )
 
+#: In "pure" mode there is no secondary worth describing, so the blend page
+#: would otherwise run to two short paragraphs and print half-empty. The space
+#: goes where it is actually useful: what an undiluted result means in practice.
+_PURE_DEPTH_LINES: tuple[str, ...] = (
+    "A result this concentrated is worth reading as good news. It means the rest of this "
+    "manual applies to {subject} more cleanly than it would to most people — fewer "
+    "exceptions, fewer moments where the pattern does not quite fit. When a page here "
+    "says they will do something, they will usually do it.",
+    "The practical effect of an undiluted result is consistency. {subject} will react to "
+    "the same pressure the same way next month and next year. That sounds unremarkable "
+    "until you count how much difficulty in any relationship comes from not knowing "
+    "which version of someone you are about to get.",
+    "What you lose with a result this clean is the usual escape hatch. There is no second "
+    "pattern to explain away the hard parts. The friction on the next few pages is not a "
+    "mood {subject} is in — it is the mechanism itself, and it is the thing to work with "
+    "rather than wait out.",
+)
+
 _PURE_SECOND_LINES: tuple[str, ...] = (
     "There is a secondary pull toward {secondary_bare}, but at {secondary_pct} percent it is "
     "background rather than driver. Treat it as a footnote — if you find yourself explaining "
@@ -279,6 +297,7 @@ class Blender:
 
         if mode == "pure":
             paragraphs.append(self.choose(_PURE_SECOND_LINES, "blend.pure-secondary"))
+            paragraphs.append(self.choose(_PURE_DEPTH_LINES, "blend.pure-depth"))
         else:
             paragraphs.append(
                 self.choose(
@@ -292,7 +311,10 @@ class Blender:
             # Name the push-pull rather than asserting both sides as fact.
             paragraphs.append(self.choose(TENSION_TEMPLATES, "blend.tension"))
 
-        if self.wing.type_id not in (p.core, p.secondary):
+        wing_is_new = self.wing.type_id != p.core and (
+            mode == "pure" or self.wing.type_id != p.secondary
+        )
+        if wing_is_new:
             paragraphs.append(self.choose(_WING_LINES, "blend.wing"))
 
         return Blend(

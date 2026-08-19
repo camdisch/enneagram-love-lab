@@ -11,6 +11,15 @@
  * that no test would catch.
  */
 
+/**
+ * Keys are a closed set, so these unions (rather than bare `number`/`string`)
+ * are what let lookups typecheck under `noUncheckedIndexedAccess` without
+ * sprinkling non-null assertions through every consumer.
+ */
+export type TypeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type RelationshipSlug = "mom" | "dad" | "boyfriend" | "girlfriend" | "best-friend";
+export type BondKind = "parent" | "partner" | "peer";
+
 export interface Trigger {
   name: string;
   looks_like: string;
@@ -75,10 +84,6 @@ export interface RelationshipLens {
   limits: string;
   leverage: string;
 }
-
-export type TypeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-export type RelationshipSlug = "mom" | "dad" | "boyfriend" | "girlfriend" | "best-friend";
-export type BondKind = "parent" | "partner" | "peer";
 
 export interface Relationship {
   slug: string;

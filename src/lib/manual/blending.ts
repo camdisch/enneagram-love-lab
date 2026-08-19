@@ -116,6 +116,17 @@ const WING_LINES = [
   "The {wing_bare} wing is the flavour on top. It shapes their style far more than their motives, which is why two people with the same core can feel so different to live alongside.",
 ];
 
+/**
+ * In "pure" mode there is no secondary worth describing, so the blend page
+ * would otherwise run to two short paragraphs and print half-empty. The space
+ * goes where it is actually useful: what an undiluted result means in practice.
+ */
+const PURE_DEPTH_LINES = [
+  "A result this concentrated is worth reading as good news. It means the rest of this manual applies to {subject} more cleanly than it would to most people — fewer exceptions, fewer moments where the pattern does not quite fit. When a page here says they will do something, they will usually do it.",
+  "The practical effect of an undiluted result is consistency. {subject} will react to the same pressure the same way next month and next year. That sounds unremarkable until you count how much difficulty in any relationship comes from not knowing which version of someone you are about to get.",
+  "What you lose with a result this clean is the usual escape hatch. There is no second pattern to explain away the hard parts. The friction on the next few pages is not a mood {subject} is in — it is the mechanism itself, and it is the thing to work with rather than wait out.",
+];
+
 const PURE_SECOND_LINES = [
   "There is a secondary pull toward {secondary_bare}, but at {secondary_pct} percent it is background rather than driver. Treat it as a footnote — if you find yourself explaining {subject} through it, you have probably over-read the number.",
   "{secondary_name} shows up faintly at {secondary_pct} percent. Real, but not load-bearing. The {core_bare} pattern will explain almost everything you need explained.",
@@ -228,6 +239,7 @@ export class Blender {
 
     if (mode === "pure") {
       paragraphs.push(this.choose(PURE_SECOND_LINES, "blend.pure-secondary"));
+      paragraphs.push(this.choose(PURE_DEPTH_LINES, "blend.pure-depth"));
     } else {
       paragraphs.push(
         this.choose(BLEND_BODIES, "blend.body", { secondary_flavour: this.flavour() }),
@@ -240,7 +252,11 @@ export class Blender {
       paragraphs.push(this.choose(TENSION_TEMPLATES, "blend.tension"));
     }
 
-    if (this.wing.type_id !== p.core && this.wing.type_id !== p.secondary) {
+    // In pure mode the secondary is explicitly not load-bearing, so the wing is
+    // still worth naming even when it happens to be that same type.
+    const wingIsNew =
+      this.wing.type_id !== p.core && (mode === "pure" || this.wing.type_id !== p.secondary);
+    if (wingIsNew) {
       paragraphs.push(this.choose(WING_LINES, "blend.wing"));
     }
 
