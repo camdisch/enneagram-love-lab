@@ -1,0 +1,949 @@
+diff --git a/src/lib/enneagram.ts b/src/lib/enneagram.ts
+index b5e373b..bd6b2c0 100644
+--- a/src/lib/enneagram.ts
++++ b/src/lib/enneagram.ts
+@@ -7,6 +7,10 @@ export type Archetype = {
+   blurb: string;
+   gift: string;
+   friction: string;
++  /** One concrete thing that settles them. Shown free, per archetype. */
++  safe: string;
++  /** One concrete thing that sets them off. Shown free, per archetype. */
++  trigger: string;
+   glyph: string;
+ };
+ 
+@@ -16,19 +20,23 @@ export const ARCHETYPES: Record<TypeId, Archetype> = {
+     name: "The Standard-Keeper",
+     title: "Type 1 · The Reformer",
+     blurb:
+-      "They love through improvement. Order is their way of saying \"I want life to be good for you.\"",
++      'They love through improvement. Order is their way of saying "I want life to be good for you."',
+     gift: "Unshakable integrity and follow-through.",
+     friction: "Correction can land as criticism when you needed comfort.",
++    safe: "Naming what you are going to do, then doing exactly that. Precision reads as respect.",
++    trigger:
++      "Being corrected in front of someone else, or a promise quietly revised after the fact.",
+     glyph: "I",
+   },
+   2: {
+     id: 2,
+     name: "The Overgiver",
+     title: "Type 2 · The Helper",
+-    blurb:
+-      "They read the room before they read themselves. Care arrives before you ask for it.",
++    blurb: "They read the room before they read themselves. Care arrives before you ask for it.",
+     gift: "Warmth that makes people feel chosen.",
+     friction: "Unspoken scorekeeping when the giving isn't returned.",
++    safe: "Being asked what they want before they are thanked for what they gave.",
++    trigger: "Their care going unnoticed, or being told they are too much.",
+     glyph: "II",
+   },
+   3: {
+@@ -39,16 +47,20 @@ export const ARCHETYPES: Record<TypeId, Archetype> = {
+       "Love looks like momentum. They show up polished, capable, and quietly hungry for admiration.",
+     gift: "They make big things feel possible for you.",
+     friction: "Image can crowd out honesty about the hard days.",
++    safe: "Interest in the effort rather than the outcome. Ask what it cost, not what it won.",
++    trigger: "Being seen mid-failure, before they have a version of the story that works.",
+     glyph: "III",
+   },
+   4: {
+     id: 4,
+     name: "The Deep Feeler",
+     title: "Type 4 · The Individualist",
+-    blurb:
+-      "Every ordinary moment has an emotional weather system. Intensity is intimacy to them.",
++    blurb: "Every ordinary moment has an emotional weather system. Intensity is intimacy to them.",
+     gift: "They meet you in feelings nobody else names.",
+     friction: "Longing for what's missing over what's already here.",
++    safe: "Sitting in the feeling with them for one minute longer than feels necessary.",
++    trigger:
++      "Being told they are overreacting, or handed a fix while still describing the problem.",
+     glyph: "IV",
+   },
+   5: {
+@@ -59,6 +71,8 @@ export const ARCHETYPES: Record<TypeId, Archetype> = {
+       "They love from a considered distance, and give you the truth instead of the performance.",
+     gift: "Calm, unflappable clarity in a crisis.",
+     friction: "Withdrawal reads as absence when you need presence.",
++    safe: "A stated end time. They can give almost anything if they know when it stops.",
++    trigger: "Being surprised with a demand, a plan, or a feeling they had no time to prepare for.",
+     glyph: "V",
+   },
+   6: {
+@@ -69,26 +83,30 @@ export const ARCHETYPES: Record<TypeId, Archetype> = {
+       "They stress-test the future so you never get blindsided. Loyalty is the whole love language.",
+     gift: "They stay. Through everything.",
+     friction: "Worry leaks out as questions that feel like doubt in you.",
++    safe: "Consistency you can prove. Small kept promises outrank one grand gesture.",
++    trigger: "Vagueness about the future, and reassurance that sounds rehearsed.",
+     glyph: "VI",
+   },
+   7: {
+     id: 7,
+     name: "The Bright Escape",
+     title: "Type 7 · The Enthusiast",
+-    blurb:
+-      "They turn Tuesday into an event and heaviness into a joke, sometimes a beat too early.",
++    blurb: "They turn Tuesday into an event and heaviness into a joke, sometimes a beat too early.",
+     gift: "Joy that genuinely re-energizes a room.",
+     friction: "Hard conversations get rescheduled indefinitely.",
++    safe: "Enthusiasm that matches theirs before you introduce the hard part.",
++    trigger: "Being pinned to a heavy conversation with no exit and no end in sight.",
+     glyph: "VII",
+   },
+   8: {
+     id: 8,
+     name: "The Fierce Protector",
+     title: "Type 8 · The Challenger",
+-    blurb:
+-      "Their love is a wall between you and the world, built loudly and without apology.",
++    blurb: "Their love is a wall between you and the world, built loudly and without apology.",
+     gift: "Nobody advocates for you harder.",
+     friction: "Intensity can feel like a verdict instead of a hug.",
++    safe: "Directness. Say the actual thing, first, without softening it into mush.",
++    trigger: "Being managed, handled, or told a partial truth for their own good.",
+     glyph: "VIII",
+   },
+   9: {
+@@ -99,6 +117,8 @@ export const ARCHETYPES: Record<TypeId, Archetype> = {
+       "Easy to be around, hard to fully find. They dissolve conflict, sometimes along with themselves.",
+     gift: "A nervous system that lowers everyone else's.",
+     friction: "Agreement that hides what they actually want.",
++    safe: "Space to answer slowly. Ask twice, and mean the second one.",
++    trigger: "Pressure to pick a side quickly, especially between two people they love.",
+     glyph: "IX",
+   },
+ };
+@@ -142,7 +162,7 @@ export const RELATIONSHIPS: Relationship[] = [
+     label: "Girlfriend",
+     subject: "your girlfriend",
+     possessive: "her",
+-    hook: "What she means when she says \"it's fine.\"",
++    hook: 'What she means when she says "it\'s fine."',
+     emoji: "🌙",
+   },
+   {
+@@ -171,7 +191,7 @@ export const QUESTIONS: Question[] = [
+       { text: "Points out that this keeps happening.", type: 1 },
+       { text: "Asks if you're okay, then offers to bring food.", type: 2 },
+       { text: "Immediately proposes a better plan.", type: 7 },
+-      { text: "Says \"no worries\" and means about 60% of it.", type: 9 },
++      { text: 'Says "no worries" and means about 60% of it.', type: 9 },
+     ],
+   },
+   {
+@@ -222,10 +242,10 @@ export const QUESTIONS: Question[] = [
+   {
+     prompt: (r) => `You tell ${r.subject} big news. First reaction?`,
+     options: [
+-      { text: "\"Okay, what's the plan?\"", type: 3 },
+-      { text: "\"Wait, how do you FEEL about it?\"", type: 4 },
+-      { text: "\"What could go wrong — just so we're ready.\"", type: 6 },
+-      { text: "\"We're celebrating. Tonight.\"", type: 7 },
++      { text: '"Okay, what\'s the plan?"', type: 3 },
++      { text: '"Wait, how do you FEEL about it?"', type: 4 },
++      { text: '"What could go wrong — just so we\'re ready."', type: 6 },
++      { text: '"We\'re celebrating. Tonight."', type: 7 },
+     ],
+   },
+   {
+@@ -267,10 +287,10 @@ export const QUESTIONS: Question[] = [
+   {
+     prompt: (r) => `The compliment that would actually land:`,
+     options: [
+-      { text: "\"You always do the right thing, even when it costs you.\"", type: 1 },
+-      { text: "\"You made this whole thing fun.\"", type: 7 },
+-      { text: "\"I feel safe with you.\"", type: 6 },
+-      { text: "\"Nobody sees things the way you do.\"", type: 4 },
++      { text: '"You always do the right thing, even when it costs you."', type: 1 },
++      { text: '"You made this whole thing fun."', type: 7 },
++      { text: '"I feel safe with you."', type: 6 },
++      { text: '"Nobody sees things the way you do."', type: 4 },
+     ],
+   },
+ ];
+diff --git a/src/lib/entitlement.ts b/src/lib/entitlement.ts
+index 4420c79..ec5b074 100644
+--- a/src/lib/entitlement.ts
++++ b/src/lib/entitlement.ts
+@@ -33,6 +33,18 @@ interface AccessRecord {
+   all: boolean;
+   /** Relationship slugs bought individually. */
+   singles: string[];
++  /**
++   * Paid-for unlocks that could not be attached to a result yet.
++   *
++   * Someone can complete a checkout with no quiz result on record — they
++   * bought from the landing page, cleared their storage mid-checkout, or
++   * finished the payment in a different browser. Before this existed they
++   * paid and got the "we can't confirm a payment" screen, which is the worst
++   * outcome the site can produce: real money in, nothing out, and a
++   * chargeback waiting. A credit is that purchase, held until they finish a
++   * test and it can be spent on the result.
++   */
++  credits: number;
+   /** Stripe Checkout Session ids that produced these grants, for support. */
+   sessions: string[];
+   grantedAt: number;
+@@ -49,6 +61,7 @@ function read(): AccessRecord | null {
+       singles: Array.isArray(parsed.singles)
+         ? parsed.singles.filter((s) => typeof s === "string")
+         : [],
++      credits: typeof parsed.credits === "number" && parsed.credits > 0 ? parsed.credits : 0,
+       sessions: Array.isArray(parsed.sessions)
+         ? parsed.sessions.filter((s) => typeof s === "string")
+         : [],
+@@ -70,7 +83,7 @@ function write(record: AccessRecord): void {
+ }
+ 
+ function blank(): AccessRecord {
+-  return { all: false, singles: [], sessions: [], grantedAt: Date.now() };
++  return { all: false, singles: [], credits: 0, sessions: [], grantedAt: Date.now() };
+ }
+ 
+ /** Unlock one relationship — what a single purchase buys. */
+@@ -99,3 +112,36 @@ export function hasAccessTo(slug: string): boolean {
+ export function hasCollection(): boolean {
+   return read()?.all === true;
+ }
++
++/**
++ * Record a completed payment that has no result to attach to yet.
++ *
++ * Called when Stripe hands back a session id but this browser has no pending
++ * purchase. The buyer is sent to take (or retake) a test, and the credit is
++ * spent the moment they land on a results page.
++ */
++export function grantCredit(session: string): void {
++  const current = read() ?? blank();
++  if (current.sessions.includes(session)) return; // already banked this payment
++  current.credits += 1;
++  current.sessions.push(session);
++  write(current);
++}
++
++/** Is there a paid-for unlock waiting to be attached to a result? */
++export function hasCredit(): boolean {
++  return (read()?.credits ?? 0) > 0;
++}
++
++/**
++ * Spend one credit on this relationship. Returns true if one was available,
++ * in which case the manual is now theirs and the paywall must not be shown.
++ */
++export function redeemCredit(slug: string): boolean {
++  const current = read();
++  if (!current || current.credits <= 0) return false;
++  current.credits -= 1;
++  if (!current.singles.includes(slug)) current.singles.push(slug);
++  write(current);
++  return true;
++}
+diff --git a/src/lib/product.ts b/src/lib/product.ts
+index 8737f7a..c36ca11 100644
+--- a/src/lib/product.ts
++++ b/src/lib/product.ts
+@@ -24,6 +24,18 @@
+  * change the matching string here.
+  */
+ 
++/**
++ * The address a buyer can reach a human at.
++ *
++ * ⚠️ NOT OPTIONAL IF YOU RUN ADS. Stripe expects a contact route for
++ * disputes, and both Meta and Google require reachable support plus a
++ * published refund policy before they will keep a purchase-optimised
++ * campaign running. Every screen that can fail a buyer prints this, and
++ * hides the sentence entirely while it is empty — so the site stays honest
++ * until you fill it in.
++ */
++export const SUPPORT_EMAIL: string = "";
++
+ export const SINGLE = {
+   name: "The Operator's Manual",
+   /** Short form for buttons and running text. */
+diff --git a/src/lib/track.ts b/src/lib/track.ts
+new file mode 100644
+index 0000000..844ade1
+--- /dev/null
++++ b/src/lib/track.ts
+@@ -0,0 +1,74 @@
++/**
++ * Funnel events, fired into whatever analytics happens to be on the page.
++ *
++ * WHY THIS EXISTS
++ * ---------------
++ * You cannot buy traffic for a funnel you cannot measure. Without a
++ * conversion event, Meta and Google are optimising for *clicks*, not
++ * *buyers* — you pay full price for the worst possible audience and the
++ * algorithm never learns who converts. That is the single most expensive
++ * mistake available to a paid-ads business, and it costs nothing to avoid.
++ *
++ * HOW TO SWITCH IT ON
++ * -------------------
++ * Paste your Meta Pixel and/or GA4 snippet into index.html (or Lovable's
++ * project settings). Nothing here needs to change: these calls no-op until
++ * a pixel exists, and start reporting the moment one does.
++ *
++ * The important one is `checkoutStarted` — mark it as your conversion
++ * event, and (once Stripe webhooks exist) fire a real Purchase server-side.
++ * Until then this measures INTENT, not revenue: treat the numbers as a
++ * ceiling, not a result.
++ */
++
++type Props = Record<string, string | number | boolean | undefined>;
++
++interface Trackers {
++  fbq?: (kind: string, event: string, props?: Props) => void;
++  gtag?: (kind: string, event: string, props?: Props) => void;
++  dataLayer?: Props[];
++}
++
++function w(): Trackers | null {
++  return typeof window === "undefined" ? null : (window as unknown as Trackers);
++}
++
++/** Fire one funnel event everywhere that is listening. Never throws. */
++export function track(event: string, props: Props = {}): void {
++  const win = w();
++  if (!win) return;
++  try {
++    win.fbq?.("trackCustom", event, props);
++    win.gtag?.("event", event, props);
++    win.dataLayer?.push({ event, ...props });
++    if (import.meta.env?.DEV) console.info("[track]", event, props);
++  } catch {
++    // Analytics must never break a checkout.
++  }
++}
++
++/** Landing page seen. */
++export const landingViewed = () => track("landing_viewed");
++
++/** They committed to a test — the first real signal of intent. */
++export const quizStarted = (relationship: string) => track("quiz_started", { relationship });
++
++/** They answered all twelve. This is the audience worth retargeting. */
++export const quizCompleted = (relationship: string) => track("quiz_completed", { relationship });
++
++/** The paywall was actually seen (not just the quiz finished). */
++export const offerViewed = (relationship: string) => track("offer_viewed", { relationship });
++
++/**
++ * They clicked through to Stripe. Mark THIS as the optimisation event until a
++ * server-side purchase event exists — it is the closest proxy you have.
++ */
++export const checkoutStarted = (relationship: string, tier: string) =>
++  track("checkout_started", { relationship, tier });
++
++/** They came back from Stripe with a session id and got the file. */
++export const purchaseConfirmed = (relationship: string, tier: string) =>
++  track("purchase_confirmed", { relationship, tier });
++
++/** They paid but we could not match them to a result — watch this number. */
++export const purchaseOrphaned = () => track("purchase_orphaned");
+diff --git a/src/routeTree.gen.ts b/src/routeTree.gen.ts
+index a55638d..3ef41c4 100644
+--- a/src/routeTree.gen.ts
++++ b/src/routeTree.gen.ts
+@@ -10,6 +10,7 @@
+ 
+ import { Route as rootRouteImport } from './routes/__root'
+ import { Route as IndexRouteImport } from './routes/index'
++import { Route as LegalRouteImport } from './routes/legal'
+ import { Route as UnlockedRouteImport } from './routes/unlocked'
+ import { Route as AnalyzingRelationshipRouteImport } from './routes/analyzing.$relationship'
+ import { Route as QuizRelationshipRouteImport } from './routes/quiz.$relationship'
+@@ -20,6 +21,11 @@ const IndexRoute = IndexRouteImport.update({
+   path: '/',
+   getParentRoute: () => rootRouteImport,
+ } as any)
++const LegalRoute = LegalRouteImport.update({
++  id: '/legal',
++  path: '/legal',
++  getParentRoute: () => rootRouteImport,
++} as any)
+ const UnlockedRoute = UnlockedRouteImport.update({
+   id: '/unlocked',
+   path: '/unlocked',
+@@ -43,6 +49,7 @@ const ResultsRelationshipRoute = ResultsRelationshipRouteImport.update({
+ 
+ export interface FileRoutesByFullPath {
+   '/': typeof IndexRoute
++  '/legal': typeof LegalRoute
+   '/unlocked': typeof UnlockedRoute
+   '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
+   '/quiz/$relationship': typeof QuizRelationshipRoute
+@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
+ }
+ export interface FileRoutesByTo {
+   '/': typeof IndexRoute
++  '/legal': typeof LegalRoute
+   '/unlocked': typeof UnlockedRoute
+   '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
+   '/quiz/$relationship': typeof QuizRelationshipRoute
+@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
+ export interface FileRoutesById {
+   __root__: typeof rootRouteImport
+   '/': typeof IndexRoute
++  '/legal': typeof LegalRoute
+   '/unlocked': typeof UnlockedRoute
+   '/analyzing/$relationship': typeof AnalyzingRelationshipRoute
+   '/quiz/$relationship': typeof QuizRelationshipRoute
+@@ -67,6 +76,7 @@ export interface FileRouteTypes {
+   fileRoutesByFullPath: FileRoutesByFullPath
+   fullPaths:
+     | '/'
++    | '/legal'
+     | '/unlocked'
+     | '/analyzing/$relationship'
+     | '/quiz/$relationship'
+@@ -74,6 +84,7 @@ export interface FileRouteTypes {
+   fileRoutesByTo: FileRoutesByTo
+   to:
+     | '/'
++    | '/legal'
+     | '/unlocked'
+     | '/analyzing/$relationship'
+     | '/quiz/$relationship'
+@@ -81,6 +92,7 @@ export interface FileRouteTypes {
+   id:
+     | '__root__'
+     | '/'
++    | '/legal'
+     | '/unlocked'
+     | '/analyzing/$relationship'
+     | '/quiz/$relationship'
+@@ -89,6 +101,7 @@ export interface FileRouteTypes {
+ }
+ export interface RootRouteChildren {
+   IndexRoute: typeof IndexRoute
++  LegalRoute: typeof LegalRoute
+   UnlockedRoute: typeof UnlockedRoute
+   AnalyzingRelationshipRoute: typeof AnalyzingRelationshipRoute
+   QuizRelationshipRoute: typeof QuizRelationshipRoute
+@@ -104,6 +117,13 @@ declare module '@tanstack/react-router' {
+       preLoaderRoute: typeof IndexRouteImport
+       parentRoute: typeof rootRouteImport
+     }
++    '/legal': {
++      id: '/legal'
++      path: '/legal'
++      fullPath: '/legal'
++      preLoaderRoute: typeof LegalRouteImport
++      parentRoute: typeof rootRouteImport
++    }
+     '/unlocked': {
+       id: '/unlocked'
+       path: '/unlocked'
+@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
+ 
+ const rootRouteChildren: RootRouteChildren = {
+   IndexRoute: IndexRoute,
++  LegalRoute: LegalRoute,
+   UnlockedRoute: UnlockedRoute,
+   AnalyzingRelationshipRoute: AnalyzingRelationshipRoute,
+   QuizRelationshipRoute: QuizRelationshipRoute,
+diff --git a/src/routes/index.tsx b/src/routes/index.tsx
+index 7299f37..109f1df 100644
+--- a/src/routes/index.tsx
++++ b/src/routes/index.tsx
+@@ -1,10 +1,12 @@
+ import { createFileRoute, Link } from "@tanstack/react-router";
+ import { ArrowRight, Sparkles, Lock, Clock } from "lucide-react";
++import { useEffect } from "react";
+ 
+ import heroCircle from "@/assets/hero-circle.jpg";
+ import { Button } from "@/components/ui/button";
+ import { ARCHETYPES, RELATIONSHIPS, type TypeId } from "@/lib/enneagram";
+-import { BUNDLE, SINGLE } from "@/lib/product";
++import { SINGLE } from "@/lib/product";
++import { landingViewed, quizStarted } from "@/lib/track";
+ 
+ export const Route = createFileRoute("/")({
+   head: () => ({
+@@ -27,6 +29,10 @@ export const Route = createFileRoute("/")({
+ });
+ 
+ function Landing() {
++  useEffect(() => {
++    landingViewed();
++  }, []);
++
+   return (
+     <main className="min-h-screen">
+       <section className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-[1.1fr_0.9fr] md:py-24">
+@@ -49,7 +55,8 @@ function Landing() {
+               </a>
+             </Button>
+             <div className="flex items-center gap-2 text-sm text-muted-foreground">
+-              <Clock className="size-4 text-primary" /> 3 minutes · no signup · answers stay on your device
++              <Clock className="size-4 text-primary" /> 3 minutes · no signup · answers stay on your
++              device
+             </div>
+           </div>
+ 
+@@ -94,6 +101,7 @@ function Landing() {
+               key={r.slug}
+               to="/quiz/$relationship"
+               params={{ relationship: r.slug }}
++              onClick={() => quizStarted(r.slug)}
+               className="group relative overflow-hidden rounded-3xl border border-border bg-card/60 p-7 transition-all hover:-translate-y-1 hover:border-primary/60 hover:shadow-[var(--shadow-glow)]"
+             >
+               <span className="text-3xl">{r.emoji}</span>
+@@ -127,47 +135,40 @@ function Landing() {
+         </div>
+       </section>
+ 
++      {/* ── The offer, WITHOUT a checkout button ────────────────────────────
++          This block used to link straight to Stripe. A visitor who has not
++          taken a test has no scores, and the manual is generated from scores —
++          so that button took real money for a file that could not be built,
++          and dropped the buyer on "we can't confirm a payment". Cold ad
++          traffic lands here, which made it the most expensive button on the
++          site. The offer still gets sold here; the only way to buy it is now
++          through a finished test, which is also the point at which someone
++          actually wants it. */}
+       <section className="mx-auto max-w-4xl px-6 pb-16">
+         <div className="rounded-3xl border border-primary/30 bg-card/60 p-10 text-center">
+           <Lock className="mx-auto size-6 text-primary" />
+-          {/* Name, price and checkout link all come from src/lib/product.ts,
+-              so this page and the results page can never advertise different
+-              things again. */}
+-          {/* Name, price and checkout link all come from src/lib/product.ts,
+-              so this page and the results page can never advertise different
+-              things again. $0.99 leads; the collection sits under it. */}
+           <h2 className="mt-5 text-3xl">{SINGLE.name}</h2>
+           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{SINGLE.description}</p>
++          <p className="mt-6 text-sm text-muted-foreground">
++            <span className="font-display text-2xl text-primary">{SINGLE.price}</span> — offered at
++            the end of any test, once there is a result to build it from.
++          </p>
+ 
+-          <div className="mt-8 flex flex-col items-center justify-center gap-4">
+-            {SINGLE.isConfigured ? (
+-              <Button asChild variant="gold" size="lg">
+-                <a href={SINGLE.stripeUrl} target="_blank" rel="noopener noreferrer">
+-                  {SINGLE.ctaLabel} ({SINGLE.price}) <ArrowRight className="size-4 ml-2" />
+-                </a>
+-              </Button>
+-            ) : (
+-              <Button variant="gold" size="lg" disabled>
+-                Checkout link not set
+-              </Button>
+-            )}
+-
+-            {BUNDLE.isConfigured && (
+-              <a
+-                href={BUNDLE.stripeUrl}
+-                target="_blank"
+-                rel="noopener noreferrer"
+-                className="text-xs text-muted-foreground underline underline-offset-4 hover:text-primary"
+-              >
+-                {BUNDLE.ctaLabel} — {BUNDLE.price}
+-              </a>
+-            )}
+-          </div>
++          <Button asChild variant="gold" size="lg" className="mt-7">
++            <a href="#tests">
++              Pick a person to decode <ArrowRight className="size-4 ml-2" />
++            </a>
++          </Button>
+         </div>
+       </section>
+ 
+       <footer className="border-t border-border/60 px-6 py-10 text-center text-xs text-muted-foreground">
+-        For entertainment and self-reflection — not a clinical assessment.
++        <p>For entertainment and self-reflection — not a clinical assessment.</p>
++        <p className="mt-3">
++          <Link to="/legal" className="underline underline-offset-4 hover:text-primary">
++            Privacy, terms & refunds
++          </Link>
++        </p>
+       </footer>
+     </main>
+   );
+diff --git a/src/routes/legal.tsx b/src/routes/legal.tsx
+new file mode 100644
+index 0000000..f6ac791
+--- /dev/null
++++ b/src/routes/legal.tsx
+@@ -0,0 +1,130 @@
++import { createFileRoute, Link } from "@tanstack/react-router";
++import { ArrowLeft } from "lucide-react";
++
++import { Button } from "@/components/ui/button";
++import { BUNDLE, SINGLE, SUPPORT_EMAIL } from "@/lib/product";
++
++/**
++ * Privacy, terms and refunds — on one page, deliberately short.
++ *
++ * ⚠️ THIS PAGE IS A PREREQUISITE FOR PAID TRAFFIC, NOT A NICE-TO-HAVE.
++ * Meta and Google both require a reachable privacy policy and a stated
++ * refund policy before they will run a commerce campaign, and Stripe asks
++ * for the same when a dispute lands. Missing them is a common reason a new
++ * ad account gets restricted in its first week — after the money is spent.
++ *
++ * It is written to be true of the site as it actually behaves today. If you
++ * ever add email capture, analytics, or a server, this page has to change
++ * with it — a privacy policy that describes the wrong product is worse than
++ * none, because it is a written claim you are not honouring.
++ */
++export const Route = createFileRoute("/legal")({
++  head: () => ({
++    meta: [
++      { title: "Privacy, terms & refunds" },
++      { name: "description", content: "How this site handles your data, and how refunds work." },
++    ],
++  }),
++  component: Legal,
++});
++
++function Legal() {
++  return (
++    <main className="min-h-screen px-6 py-12">
++      <div className="mx-auto max-w-2xl">
++        <Button asChild variant="ghost" size="sm">
++          <Link to="/">
++            <ArrowLeft className="size-4" /> Back
++          </Link>
++        </Button>
++
++        <h1 className="mt-8 text-4xl">
++          <span className="text-gradient-gold">Privacy, terms & refunds</span>
++        </h1>
++
++        <div className="mt-10 space-y-10 text-sm leading-relaxed text-muted-foreground">
++          <section>
++            <h2 className="text-lg text-foreground">What this is</h2>
++            <p className="mt-3">
++              A set of Enneagram-style questionnaires about the people in your life, and a paid PDF
++              manual generated from your answers. It is written for entertainment and
++              self-reflection. It is not a clinical, psychological, or diagnostic assessment, and
++              nothing in it should be used to make medical, legal, or safety decisions about
++              yourself or anyone else.
++            </p>
++          </section>
++
++          <section>
++            <h2 className="text-lg text-foreground">Your answers</h2>
++            <p className="mt-3">
++              Your quiz answers never leave your browser. They are held in your device's own storage
++              so the results page and the manual can be built, and the manual itself is generated on
++              your device rather than on a server. We do not have a copy, cannot retrieve one for
++              you, and clearing your browser data deletes it permanently.
++            </p>
++            <p className="mt-3">
++              We do not ask for your name, your email address, or the name of the person you are
++              answering about.
++            </p>
++          </section>
++
++          <section>
++            <h2 className="text-lg text-foreground">Payments</h2>
++            <p className="mt-3">
++              Payments are processed by Stripe. Your card details are entered on Stripe's own
++              checkout page and are never seen by, or sent to, this site. Stripe holds your payment
++              information under its own privacy policy at stripe.com.
++            </p>
++            <p className="mt-3">
++              {SINGLE.name} is {SINGLE.price} for a single manual. {BUNDLE.name} is {BUNDLE.price}{" "}
++              and covers all five. Both are one-time payments. There is no subscription, no
++              recurring charge, and nothing to cancel.
++            </p>
++          </section>
++
++          <section>
++            <h2 className="text-lg text-foreground">Delivery</h2>
++            <p className="mt-3">
++              The manual is a PDF that downloads immediately after payment, built in your browser
++              from the answers you gave. Because it is tied to the device you bought it on, it is
++              not automatically available on your other devices — save the file somewhere you can
++              find it again.
++            </p>
++          </section>
++
++          <section>
++            <h2 className="text-lg text-foreground">Refunds</h2>
++            <p className="mt-3">
++              If the manual does not download, is not what was described, or you simply are not
++              happy with it, you can have your money back. Reply to your Stripe receipt
++              {SUPPORT_EMAIL ? <> or email {SUPPORT_EMAIL}</> : null} within 30 days and the refund
++              is issued in full, with no questions and nothing to return.
++            </p>
++          </section>
++
++          <section>
++            <h2 className="text-lg text-foreground">Third parties</h2>
++            <p className="mt-3">
++              Fonts are loaded from Google Fonts, which receives your IP address as part of serving
++              them. Payment is handled by Stripe. If advertising or analytics tools are added to
++              this site, they will be named here.
++            </p>
++          </section>
++
++          <section>
++            <h2 className="text-lg text-foreground">Contact</h2>
++            <p className="mt-3">
++              {SUPPORT_EMAIL ? (
++                <>
++                  Email {SUPPORT_EMAIL}, or reply to your Stripe receipt. We answer every message.
++                </>
++              ) : (
++                <>Reply to your Stripe receipt and it reaches us directly.</>
++              )}
++            </p>
++          </section>
++        </div>
++      </div>
++    </main>
++  );
++}
+diff --git a/src/routes/results.$relationship.tsx b/src/routes/results.$relationship.tsx
+index 3958b01..4a4e992 100644
+--- a/src/routes/results.$relationship.tsx
++++ b/src/routes/results.$relationship.tsx
+@@ -21,9 +21,10 @@ import {
+   type Scores,
+ } from "@/lib/enneagram";
+ import { ManualDownload } from "@/components/ManualDownload";
+-import { hasAccessTo } from "@/lib/entitlement";
++import { hasAccessTo, redeemCredit } from "@/lib/entitlement";
+ import { encodeScores, savePendingPurchase, type PurchaseTier } from "@/lib/pendingPurchase";
+ import { BUNDLE, SINGLE } from "@/lib/product";
++import { checkoutStarted, offerViewed, quizCompleted } from "@/lib/track";
+ 
+ export const Route = createFileRoute("/results/$relationship")({
+   loader: ({ params }) => {
+@@ -60,9 +61,21 @@ function Results() {
+   const [owned, setOwned] = useState(false);
+ 
+   useEffect(() => {
+-    setScores(loadResult(relationship.slug));
+-    setOwned(hasAccessTo(relationship.slug));
++    const loaded = loadResult(relationship.slug);
++    setScores(loaded);
++
++    // A credit is a purchase that arrived before there was a result to attach
++    // it to. Spend it here, silently — they already paid, and being asked to
++    // pay twice is how a $0.99 sale becomes a $15 dispute.
++    const alreadyOwned = hasAccessTo(relationship.slug);
++    const owns = alreadyOwned || (loaded !== null && redeemCredit(relationship.slug));
++    setOwned(owns);
+     setReady(true);
++
++    if (loaded) {
++      quizCompleted(relationship.slug);
++      if (!owns) offerViewed(relationship.slug);
++    }
+   }, [relationship.slug]);
+ 
+   if (ready && !scores) {
+@@ -101,6 +114,7 @@ function Results() {
+       relationship: relationship.slug,
+       tier,
+     });
++    checkoutStarted(relationship.slug, tier);
+   }
+ 
+   function share() {
+@@ -193,40 +207,44 @@ function Results() {
+                 </div>
+               </div>
+ 
+-              {/* FREE PLAYBOOK BLOCK */}
++              {/* FREE PLAYBOOK BLOCK
++                  Reads from the archetype they actually scored. It used to be
++                  one hard-coded paragraph shown to all nine, which is the
++                  fastest way to teach a visitor that the "personalised" thing
++                  you are about to sell them is filler. Free proof has to be
++                  specific, or it argues against the paid product. */}
+               <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left space-y-4">
+                 <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
+-                  Free Playbook: How to Handle Their Stress Today
++                  Free playbook: handling {relationship.subject} today
+                 </h3>
+                 <div className="grid gap-3 sm:grid-cols-2">
+                   <div className="rounded-xl bg-background/50 p-4 border border-border/50">
+                     <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-1">
+-                      <HeartHandshake className="size-4" /> What Makes Them Feel Safe
++                      <HeartHandshake className="size-4" /> What makes them feel safe
+                     </div>
+-                    <p className="text-sm text-muted-foreground">
+-                      Clear validation, patience, and stable physical presence before you attempt
+-                      any logical fixes.
+-                    </p>
++                    <p className="text-sm text-muted-foreground">{primary.safe}</p>
+                   </div>
+                   <div className="rounded-xl bg-background/50 p-4 border border-border/50">
+                     <div className="flex items-center gap-2 text-xs font-semibold text-destructive uppercase tracking-wider mb-1">
+-                      <ShieldAlert className="size-4" /> What Triggers Defensiveness
++                      <ShieldAlert className="size-4" /> What triggers defensiveness
+                     </div>
+-                    <p className="text-sm text-muted-foreground">
+-                      Dismissing their core concerns or demanding instant rational explanations
+-                      under pressure.
+-                    </p>
++                    <p className="text-sm text-muted-foreground">{primary.trigger}</p>
+                   </div>
+                 </div>
+               </div>
+ 
+               {/* ENHANCED OPERATOR'S MANUAL / BLUEPRINT PITCH */}
+               <div className="rounded-2xl border border-border/80 bg-card/60 p-6 my-6 text-left">
++                {/* This block sells the $0.99 SINGLE manual, which is the
++                    button directly beneath it. It used to be headed "for all
++                    five" — describing the bundle while the buyer was looking
++                    at the single price. Advertising one thing and charging for
++                    another is exactly the mismatch that produces refunds. */}
+                 <h3 className="text-sm font-semibold uppercase tracking-wider text-primary mb-2">
+-                  The Complete 24-Page Operator's Manual — for all five
++                  Inside the 24-page manual for {relationship.subject}
+                 </h3>
+                 <p className="text-xs text-muted-foreground mb-4">
+-                  Everything you need to navigate them for the rest of your life without guessing.
++                  Written from the twelve answers you just gave — not a generic type description.
+                 </p>
+                 <ul className="space-y-3 text-sm text-muted-foreground">
+                   <li className="flex gap-3">
+diff --git a/src/routes/unlocked.tsx b/src/routes/unlocked.tsx
+index c67abfc..1d04d6d 100644
+--- a/src/routes/unlocked.tsx
++++ b/src/routes/unlocked.tsx
+@@ -6,9 +6,10 @@ import { z } from "zod";
+ import { ManualDownload } from "@/components/ManualDownload";
+ import { Button } from "@/components/ui/button";
+ import { RELATIONSHIPS } from "@/lib/enneagram";
+-import { grantAll, grantSingle } from "@/lib/entitlement";
++import { grantAll, grantCredit, grantSingle } from "@/lib/entitlement";
+ import { loadPendingPurchase, type PendingPurchase } from "@/lib/pendingPurchase";
+-import { BUNDLE, SINGLE } from "@/lib/product";
++import { BUNDLE, SINGLE, SUPPORT_EMAIL } from "@/lib/product";
++import { purchaseConfirmed, purchaseOrphaned } from "@/lib/track";
+ 
+ /**
+  * Where Stripe sends buyers after a completed payment.
+@@ -57,7 +58,7 @@ export const Route = createFileRoute("/unlocked")({
+   component: Unlocked,
+ });
+ 
+-type Status = "checking" | "granted" | "unverified";
++type Status = "checking" | "granted" | "credited" | "unverified";
+ 
+ function Unlocked() {
+   const search = Route.useSearch();
+@@ -77,16 +78,27 @@ function Unlocked() {
+         ? { scores: s, relationship: r, subjectName: n, tier: "single", savedAt: Date.now() }
+         : loadPendingPurchase();
+ 
+-    // Two independent things must be true before anything unlocks: Stripe
+-    // handed back a session id, and this browser actually began a checkout.
+-    // Either one alone is something a passer-by could produce.
++    // Stripe handing back a session id is the evidence that a payment
++    // happened. Without it this page is a free download for anyone who finds
++    // the URL, so nothing is granted.
+     const looksPaid = session !== undefined && SESSION_ID.test(session);
+-    if (!looksPaid || !record) {
++    if (!looksPaid) {
+       setPending(record);
+       setStatus("unverified");
+       return;
+     }
+ 
++    // Paid, but this browser has no result to attach the purchase to — they
++    // bought from the landing page, or cleared storage mid-checkout. Never
++    // refuse a real payment: bank it as a credit, send them to a test, and
++    // hand the manual over free at the end of it.
++    if (!record) {
++      grantCredit(session);
++      purchaseOrphaned();
++      setStatus("credited");
++      return;
++    }
++
+     const isBundle = (all !== undefined && all !== "" && all !== "0") || record.tier === "bundle";
+     if (isBundle) {
+       grantAll(session);
+@@ -97,11 +109,49 @@ function Unlocked() {
+     setBoughtEverything(isBundle);
+     setPending(record);
+     setStatus("granted");
++    purchaseConfirmed(record.relationship, isBundle ? "bundle" : "single");
+   }, [search]);
+ 
+   if (status === "checking") return null;
+ 
+-  // ── Could not confirm a payment ─────────────────────────────────────────
++  // ── Paid, but there is no result to attach it to ────────────────────────
++  // They are owed a manual. Do not sell to them again; take them to a test.
++  if (status === "credited") {
++    return (
++      <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
++        <div className="mx-auto w-full max-w-md">
++          <Check className="mx-auto size-7 text-primary" />
++          <h1 className="mt-6 text-3xl">
++            <span className="text-gradient-gold">Payment received</span>
++          </h1>
++          <p className="mt-4 text-muted-foreground">
++            Your manual is built from quiz answers, and we don't have a result on this device yet.
++            Pick the person you want decoded — your manual is waiting at the end of it, already paid
++            for.
++          </p>
++
++          <div className="mt-8 grid gap-2 text-left">
++            {RELATIONSHIPS.map((rel) => (
++              <Button key={rel.slug} asChild variant="outlineGold" className="justify-start">
++                <Link to="/quiz/$relationship" params={{ relationship: rel.slug }}>
++                  <span className="mr-2">{rel.emoji}</span> The {rel.label} Test
++                  <ArrowRight className="size-4 ml-auto" />
++                </Link>
++              </Button>
++            ))}
++          </div>
++
++          <p className="mt-8 text-xs text-muted-foreground">
++            Take the test in this browser and nothing is charged again. Stuck? Reply to your Stripe
++            receipt{SUPPORT_EMAIL ? ` or email ${SUPPORT_EMAIL}` : ""} and we'll send the PDF over
++            directly.
++          </p>
++        </div>
++      </main>
++    );
++  }
++
++  // ── No evidence of a payment at all ─────────────────────────────────────
+   if (status === "unverified") {
+     return (
+       <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16 text-center">
+@@ -110,20 +160,19 @@ function Unlocked() {
+           <h1 className="mt-6 text-3xl">We can't confirm a payment yet</h1>
+           <p className="mt-4 text-muted-foreground">
+             This page only opens after a completed checkout. If you have just paid and landed here,
+-            your money is safe — reply to your Stripe receipt and we'll send the PDF straight over.
++            your money is safe — reply to your Stripe receipt
++            {SUPPORT_EMAIL ? ` or email ${SUPPORT_EMAIL}` : ""} and we'll send the PDF straight
++            over.
+           </p>
+ 
++          {/* Deliberately NOT a buy button. Someone who lands here has either
++              already paid (selling to them again is how you earn a chargeback)
++              or has no quiz result, and a manual cannot be built without one.
++              Both roads start at a test. */}
+           <div className="mt-8 flex flex-col items-center gap-3">
+-            {SINGLE.isConfigured && (
+-              <Button asChild variant="gold" size="lg">
+-                <a href={SINGLE.stripeUrl} target="_blank" rel="noopener noreferrer">
+-                  {SINGLE.ctaLabel} ({SINGLE.price}) <ArrowRight className="size-4 ml-1" />
+-                </a>
+-              </Button>
+-            )}
+-            <Button asChild variant="ghost">
++            <Button asChild variant="gold" size="lg">
+               <Link to="/">
+-                <RefreshCw className="size-4" /> Back to the tests
++                <RefreshCw className="size-4" /> Take a test
+               </Link>
+             </Button>
+           </div>
