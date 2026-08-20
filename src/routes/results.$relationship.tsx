@@ -11,7 +11,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { toast } from "sonner";
-import { AdSlot } from "@/components/AdSlot";
 import { Button } from "@/components/ui/button";
 import {
   ARCHETYPES,
@@ -117,8 +116,6 @@ function Results() {
   return (
     <main className="min-h-screen px-6 py-10">
       <div className="mx-auto max-w-3xl">
-        <AdSlot slot="top" />
-
         {primary && (
           <>
             <section className="animate-rise mt-12 text-center">
@@ -250,8 +247,8 @@ function Results() {
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-primary" />
                     <span>
-                      <strong>Famous Archetype Parallels:</strong> Real-world psychological patterns
-                      and historical traits shared by similar profiles.
+                      <strong>Their Triggers, Named:</strong> Exactly what detonates them, and the
+                      early warning signs that show up before it does.
                     </span>
                   </li>
                   <li className="flex gap-3">
@@ -271,7 +268,7 @@ function Results() {
                 </ul>
                 <div className="mt-6 border-t border-border/60 pt-4 text-center">
                   <p className="text-xs text-muted-foreground">
-                    ⚡ Instant PDF Download · Read in 10 minutes · 100% Tailored to Your Results
+                    ⚡ Instant PDF download · 24 pages · Built entirely from your answers
                   </p>
                 </div>
               </div>
@@ -362,10 +359,6 @@ function Results() {
             </section>
           </>
         )}
-
-        <div className="mt-12">
-          <AdSlot slot="bottom" />
-        </div>
       </div>
     </main>
   );

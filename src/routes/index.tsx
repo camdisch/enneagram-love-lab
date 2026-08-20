@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Lock, Clock } from "lucide-react";
 
 import heroCircle from "@/assets/hero-circle.jpg";
-import { AdSlot } from "@/components/AdSlot";
 import { Button } from "@/components/ui/button";
 import { ARCHETYPES, RELATIONSHIPS, type TypeId } from "@/lib/enneagram";
 import { BUNDLE, SINGLE } from "@/lib/product";
@@ -30,10 +29,6 @@ export const Route = createFileRoute("/")({
 function Landing() {
   return (
     <main className="min-h-screen">
-      <div className="px-4 pt-6">
-        <AdSlot slot="top" />
-      </div>
-
       <section className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-[1.1fr_0.9fr] md:py-24">
         <div className="animate-rise">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-xs uppercase tracking-[0.28em] text-primary">
@@ -54,15 +49,15 @@ function Landing() {
               </a>
             </Button>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Clock className="size-4 text-primary" /> 3 minutes · no signup
+              <Clock className="size-4 text-primary" /> 3 minutes · no signup · answers stay on your device
             </div>
           </div>
 
           <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-8">
             {[
-              ["412k", "tests taken"],
-              ["1 in 4", "get Type 2"],
-              ["87%", "send it on"],
+              ["12", "questions"],
+              ["9", "archetypes"],
+              ["24", "page manual"],
             ].map(([k, v]) => (
               <div key={v}>
                 <dt className="font-display text-2xl text-primary">{k}</dt>
@@ -170,10 +165,6 @@ function Landing() {
           </div>
         </div>
       </section>
-
-      <div className="px-4 pb-10">
-        <AdSlot slot="bottom" />
-      </div>
 
       <footer className="border-t border-border/60 px-6 py-10 text-center text-xs text-muted-foreground">
         For entertainment and self-reflection — not a clinical assessment.

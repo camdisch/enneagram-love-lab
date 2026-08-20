@@ -2,7 +2,6 @@ import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
-import { AdSlot } from "@/components/AdSlot";
 import { Button } from "@/components/ui/button";
 import {
   QUESTIONS,
@@ -106,12 +105,6 @@ function Quiz() {
             ))}
           </div>
         </div>
-
-        {index === 5 && (
-          <div className="mt-12">
-            <AdSlot slot="mid-quiz" />
-          </div>
-        )}
       </div>
     </main>
   );
