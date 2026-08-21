@@ -9,7 +9,9 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "verify:paywall": "tsx scripts/verify-paywall.ts",
+    "verify:manuals": "tsx scripts/sweep-every-combination.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
